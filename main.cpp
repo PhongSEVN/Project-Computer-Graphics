@@ -3,7 +3,10 @@
 #include <math.h>
 #include <vector>
 #include <ctime>
-
+float santaX = -1.0f; // T?a d? ban d?u c?a ông già Noel
+int goc = 0;
+float posX = 0.0f, posY = 0.0f, posZ = 0.0f; // T?a d? ban d?u
+float moveSpeed = 0.1f;         
 struct Snowflake {
     float x, y, size, speed;
 };
@@ -644,71 +647,165 @@ void drawAurora() {
     }
     glEnd();
 }
-
 void drawSnowman() {
+    // Thân du?i (hình c?u l?n)
     glColor3f(0.9, 0.9, 0.8);
-    glBegin(GL_POLYGON);
-    for (int i = 0; i < 360; i++) {
-        float angle = i * M_PI / 180.0;
-        glVertex2f(0.0 + 0.15 * cos(angle), -0.65 + 0.15 * sin(angle));
-    }
-    glEnd();
+    glPushMatrix();
+    glTranslatef(0.0, -0.65, 0.0);
+    glutSolidSphere(0.15, 50, 50);
+    glPopMatrix();
 
-    glBegin(GL_POLYGON);
-    for (int i = 0; i < 360; i++) {
-        float angle = i * M_PI / 180.0;
-        glVertex2f(0.0 + 0.12 * cos(angle), -0.38 + 0.12 * sin(angle));
-    }
-    glEnd();
+    // Thân trên (hình c?u nh?)
+    glPushMatrix();
+    glTranslatef(0.0, -0.38, 0.0);
+    glutSolidSphere(0.12, 50, 50);
+    glPopMatrix();
 
-    glBegin(GL_POLYGON);
-    for (int i = 0; i < 360; i++) {
-        float angle = i * M_PI / 180.0;
-        glVertex2f(0.0 + 0.08 * cos(angle), -0.18 + 0.08 * sin(angle));
-    }
-    glEnd();
+    // Ð?u (hình c?u nh? nh?t)
+    glPushMatrix();
+    glTranslatef(0.0, -0.18, 0.0);
+    glutSolidSphere(0.08, 50, 50);
+    glPopMatrix();
 
+    // M?t
     glColor3f(0.0, 0.0, 0.0);
-    glPointSize(5.0);
-    glBegin(GL_POINTS);
-    glVertex2f(-0.02, -0.15);
-    glVertex2f(0.02, -0.15);
-    glEnd();
+    glPushMatrix();
+    glTranslatef(-0.02, -0.15, 0.07);
+    glutSolidSphere(0.01, 50, 50);
+    glPopMatrix();
 
+    glPushMatrix();
+    glTranslatef(0.02, -0.15, 0.07);
+    glutSolidSphere(0.01, 50, 50);
+    glPopMatrix();
+
+    // Mui (hình nón)
     glColor3f(1.0, 0.5, 0.0);
-    glBegin(GL_TRIANGLES);
-    glVertex2f(0.0, -0.18);
-    glVertex2f(0.05, -0.18);
-    glVertex2f(0.0, -0.2);
+    glPushMatrix();
+    glTranslatef(0.0, -0.18, 0.07);
+    glRotatef(-90, 1, 0, 0);
+    glutSolidCone(0.02, 0.1, 50, 50);
+    glPopMatrix();
+}
+//void drawSnowman() {
+//    glColor3f(0.9, 0.9, 0.8);
+//    glBegin(GL_POLYGON);
+//    for (int i = 0; i < 360; i++) {
+//        float angle = i * M_PI / 180.0;
+//        glVertex2f(0.0 + 0.15 * cos(angle), -0.65 + 0.15 * sin(angle));
+//    }
+//    glEnd();
+//
+//    glBegin(GL_POLYGON);
+//    for (int i = 0; i < 360; i++) {
+//        float angle = i * M_PI / 180.0;
+//        glVertex2f(0.0 + 0.12 * cos(angle), -0.38 + 0.12 * sin(angle));
+//    }
+//    glEnd();
+//
+//    glBegin(GL_POLYGON);
+//    for (int i = 0; i < 360; i++) {
+//        float angle = i * M_PI / 180.0;
+//        glVertex2f(0.0 + 0.08 * cos(angle), -0.18 + 0.08 * sin(angle));
+//    }
+//    glEnd();
+//
+//    glColor3f(0.0, 0.0, 0.0);
+//    glPointSize(5.0);
+//    glBegin(GL_POINTS);
+//    glVertex2f(-0.02, -0.15);
+//    glVertex2f(0.02, -0.15);
+//    glEnd();
+//
+//    glColor3f(1.0, 0.5, 0.0);
+//    glBegin(GL_TRIANGLES);
+//    glVertex2f(0.0, -0.18);
+//    glVertex2f(0.05, -0.18);
+//    glVertex2f(0.0, -0.2);
+//    glEnd();
+//
+//    glColor3f(0.5, 0.3, 0.1);
+//    glLineWidth(3.0);
+//    glBegin(GL_LINES);
+//    glVertex2f(-0.12, -0.38);
+//    glVertex2f(-0.25, -0.45);
+//    glEnd();
+//
+//    glBegin(GL_LINES);
+//    glVertex2f(0.12, -0.38);
+//    glVertex2f(0.25, -0.45);
+//    glEnd();
+//
+//    drawPenguin(-0.3, -0.7, 0.08, 0.12);  
+//    drawPenguin(0.3, -0.8, 0.08, 0.12);   
+// 
+//    drawSmallTree(-0.8, -0.72, 0.2);  
+//    drawSmallTree(0.8, -0.67, 0.2);   
+//
+//    drawPinkGiftBox(-0.5, -0.8, 0.1);
+//	drawPinkGiftBox(0.5, -0.8, 0.1);
+//	
+//	drawWoodenSignWithText(-0.2, 0.015, 0.3, 0.2, "Christmas Eve");
+//}
+void drawSantaAndReindeer() {
+    glColor3f(0.0f, 0.0f, 0.0f); // Màu den cho bóng
+
+    // V? xe kéo
+    glBegin(GL_POLYGON);
+    glVertex2f(-0.1f, -0.05f);
+    glVertex2f(0.1f, -0.05f);
+    glVertex2f(0.1f, 0.05f);
+    glVertex2f(-0.1f, 0.05f);
     glEnd();
 
-    glColor3f(0.5, 0.3, 0.1);
-    glLineWidth(3.0);
+    // V? ông già Noel (hình tròn)
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(0.0f, 0.1f); // Tâm hình tròn
+    for (int i = 0; i <= 360; i += 10) {
+        float angle = i * M_PI / 180.0f;
+        glVertex2f(0.03f * cos(angle), 0.1f + 0.03f * sin(angle));
+    }
+    glEnd();
+
+    // V? tu?n l?c (2 hình tròn làm thân và d?u)
+    glBegin(GL_TRIANGLE_FAN); // Thân
+    glVertex2f(0.2f, 0.0f); 
+    for (int i = 0; i <= 360; i += 10) {
+        float angle = i * M_PI / 180.0f;
+        glVertex2f(0.05f * cos(angle) + 0.2f, 0.05f * sin(angle));
+    }
+    glEnd();
+
+    glBegin(GL_TRIANGLE_FAN); // Ð?u
+    glVertex2f(0.25f, 0.05f); 
+    for (int i = 0; i <= 360; i += 10) {
+        float angle = i * M_PI / 180.0f;
+        glVertex2f(0.03f * cos(angle) + 0.25f, 0.03f * sin(angle) + 0.05f);
+    }
+    glEnd();
+
+    // V? s?ng tu?n l?c
     glBegin(GL_LINES);
-    glVertex2f(-0.12, -0.38);
-    glVertex2f(-0.25, -0.45);
+    glVertex2f(0.26f, 0.08f); glVertex2f(0.28f, 0.1f);
+    glVertex2f(0.26f, 0.08f); glVertex2f(0.24f, 0.1f);
     glEnd();
-
-    glBegin(GL_LINES);
-    glVertex2f(0.12, -0.38);
-    glVertex2f(0.25, -0.45);
-    glEnd();
-
-    drawPenguin(-0.3, -0.7, 0.08, 0.12);  
-    drawPenguin(0.3, -0.8, 0.08, 0.12);   
- 
-    drawSmallTree(-0.8, -0.72, 0.2);  
-    drawSmallTree(0.8, -0.67, 0.2);   
-
-    drawPinkGiftBox(-0.5, -0.8, 0.1);
-	drawPinkGiftBox(0.5, -0.8, 0.1);
-	
-drawWoodenSignWithText(-0.2, 0.015, 0.3, 0.2, "Christmas Eve");
+}
+void update_santa(int value) {
+    santaX += 0.01f; // Di chuy?n sang ph?i
+    if (santaX > 1.5f) { // N?u ra kh?i màn hình, quay l?i t? d?u
+        santaX = -1.5f;
+    }
+    glutPostRedisplay(); // Yêu c?u v? l?i
+    glutTimerFunc(16, update_santa, 0); // C?p nh?t sau 16ms (~60fps)
 }
 
 void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+//    glColor3f(0.0,0.3,0.7);
+    gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    //glScalef(tlx, tly, tlz);
+    glTranslatef(posX, posY, posZ);
     // V? b?u tr?i
     glColor3f(0.0, 0.0, 0.2);
     glBegin(GL_QUADS);
@@ -745,7 +842,11 @@ void display() {
         glColor3f(1.0, 1.0, 1.0);  
         drawText("Merry Christmas", messageX, 0.0);
     }
-
+	// Di chuy?n ông già Noel
+    glPushMatrix();
+    glTranslatef(santaX, 0.5f, 0.0f); // Di chuy?n ngang qua b?u tr?i
+    drawSantaAndReindeer();
+    glPopMatrix();
     glutSwapBuffers();
 }
 
@@ -808,7 +909,41 @@ void update(int value) {
     glutPostRedisplay();
     glutTimerFunc(16, update, 0);
 }
+void keyboard(unsigned char key, int x, int y) {
+    switch (key) {
+        case 'a': // Di chuy?n sang trái
+        case 'A':
+            posX -= moveSpeed;
+            glutPostRedisplay();
+            break;
+        case 'd': // Di chuy?n sang ph?i
+        case 'D':
+            posX += moveSpeed;
+            glutPostRedisplay();
+            break;
+        case 'w': // Di chuy?n lên
+        case 'W':
+            posY += moveSpeed;
+            glutPostRedisplay();
+            break;
+        case 's': // Di chuy?n xu?ng
+        case 'S':
+            posY -= moveSpeed;
+            glutPostRedisplay();
+            break;
+        default:
+            break;
+    }
+}
 
+
+void reshape(int w, int h) {
+    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20.0);
+    glMatrixMode(GL_MODELVIEW);
+}
 int main(int argc, char** argv) {
     srand(time(0));
     generateSnowflakes();
@@ -820,8 +955,11 @@ int main(int argc, char** argv) {
 	glutFullScreen();
     init();
     glutDisplayFunc(display);
+    glutTimerFunc(16, update_santa, 0);
     glutKeyboardFunc(handleKeypress); 
     glutTimerFunc(25, update, 0);
+    glutReshapeFunc(reshape);
+    glutKeyboardFunc(keyboard);
     glutMainLoop();
 
     return 0;
