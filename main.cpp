@@ -13,10 +13,37 @@ int lastMouseX, lastMouseY;                   // V? trí chu?t tru?c dó
 
 std::map<unsigned char, bool> keyStates;      // Tr?ng thái phím thu?ng
 std::map<int, bool> specialKeyStates;         // Tr?ng thái phím d?c bi?t
+void setupLighting()
+{
+    GLfloat ambientLight[] = {1.0f, 0.0f, 0.0f, 1.0f}; // Ánh sáng môi truong (ambient)
+   	GLfloat diffuseLight[] = {1.0f, 1.0f, 1.0f, 1.0f}; // Ánh sáng khuech tán (diffuse)
+    GLfloat specularLight[] = {1.0f, 1.0f, 1.0f, 1.0f};// Ánh sáng phan chieu (specular)
+    GLfloat lightPosition[] = {1.0f, 1.0f, 1.0f, 0.0f}; // Vi tri nguon sang
 
+    // Thi?t l?p ánh sáng môi tru?ng và khu?ch tán
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+
+
+    // B?t ngu?n sáng
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    // Thi?t l?p v?t li?u: Ð?c di?m ph?n chi?u specular c?a v?t li?u
+    GLfloat mat_specular[] = {1.0f, 0.0f, 0.0f, 1.0f};
+	GLfloat mat_shininess[] = {50.0f};
+
+
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
+}
 void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glShadeModel(GL_FLAT);
+	setupLighting();
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -72,7 +99,7 @@ void display(void) {
 
     // V? d?i tu?ng
     glColor3f(1.0, 1.0, 1.0);
-    glutWireTeapot(1.0);
+    glutSolidTeapot(1.0);
 
     glutSwapBuffers();
 }
