@@ -153,9 +153,8 @@ void motion(int x, int y) {
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
-    glutCreateWindow("Camera Movement and Rotation");
-
+    glutCreateWindow("Noel Scene");
+	glutFullScreen();
     init();
 
     glutDisplayFunc(display);
