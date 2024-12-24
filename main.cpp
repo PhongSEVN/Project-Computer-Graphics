@@ -4,9 +4,9 @@
 #include <gl/glut.h>
 #include <map>
 
-float camX = 0.0f, camY = 0.0f, camZ = 5.0f;  // V? trí camera
-float camYaw = 0.0f, camPitch = 0.0f;         // Góc yaw và pitch
-float step = 0.005f;                          // T?c d? di chuy?n
+float camX = 0.0f, camY = 0.0f, camZ = 5.0f;  // Vi tri camera
+float camYaw = 0.0f, camPitch = 0.0f;         // Góoc yaw và pitch
+float velocity = 0.005f;                          // Toc do di chuyen
 float rotationSpeed = 0.005f;                 // T?c d? xoay camera
 bool isLeftMousePressed = false;              // Tr?ng thái nh?n chu?t trái
 int lastMouseX, lastMouseY;                   // V? trí chu?t tru?c dó
@@ -67,23 +67,23 @@ void handleSpecialKeyboardUp(int key, int x, int y) {
 void update() {
     // Di chuy?n b?ng các phím thu?ng
     if (keyStates['w']) {
-        camX += step * sin(camYaw);
-        camZ -= step * cos(camYaw);
+        camX +=velocity * sin(camYaw);
+        camZ -=velocity * cos(camYaw);
     }
     if (keyStates['s']) {
-        camX -= step * sin(camYaw);
-        camZ += step * cos(camYaw);
+        camX -=velocity * sin(camYaw);
+        camZ +=velocity * cos(camYaw);
     }
     if (keyStates['a']) {
-        camX -= step * cos(camYaw);
-        camZ -= step * sin(camYaw);
+        camX -=velocity * cos(camYaw);
+        camZ -=velocity * sin(camYaw);
     }
     if (keyStates['d']) {
-        camX += step * cos(camYaw);
-        camZ += step * sin(camYaw);
+        camX +=velocity * cos(camYaw);
+        camZ +=velocity * sin(camYaw);
     }
-    if (keyStates[' ']) camY += step;  // Lên cao khi nh?n Space
-    if (keyStates['c']) camY -= step;  // Xu?ng th?p khi nh?n Shift
+    if (keyStates[' ']) camY +=velocity;  // Lên cao khi nh?n Space
+    if (keyStates['c']) camY -=velocity;  // Xu?ng th?p khi nh?n Shift
 	
     glutPostRedisplay();
 }
@@ -99,8 +99,13 @@ void display(void) {
 
     // V? d?i tu?ng
     glColor3f(1.0, 1.0, 1.0);
-    glutSolidTeapot(1.0);
-
+	glColor3f(0.2f, 0.8f, 0.2f); // Màu xanh lá
+    glBegin(GL_QUADS);           // B?t d?u v? hình t? giác
+        glVertex3f(-10.0f, -1.0f, -10.0f); // Ð?nh th? nh?t
+        glVertex3f( 10.0f, -1.0f, -10.0f); // Ð?nh th? hai
+        glVertex3f( 10.0f, -1.0f,  10.0f); // Ð?nh th? ba
+        glVertex3f(-10.0f, -1.0f,  10.0f); // Ð?nh th? tu
+    glEnd();
     glutSwapBuffers();
 }
 
