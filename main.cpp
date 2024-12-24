@@ -4,15 +4,64 @@
 #include <gl/glut.h>
 #include <map>
 
-float camX = 0.0f, camY = 0.0f, camZ = 5.0f;  // Vi tri camera
+float camX = 0.0f, camY = 2.0f, camZ = 5.0f;  // Vi tri camera
 float camYaw = 0.0f, camPitch = 0.0f;         // Góoc yaw và pitch
 float velocity = 0.005f;                          // Toc do di chuyen
 float rotationSpeed = 0.005f;                 // T?c d? xoay camera
 bool isLeftMousePressed = false;              // Tr?ng thái nh?n chu?t trái
 int lastMouseX, lastMouseY;                   // V? trí chu?t tru?c dó
 
-std::map<unsigned char, bool> keyStates;      // Tr?ng thái phím thu?ng
-std::map<int, bool> specialKeyStates;         // Tr?ng thái phím d?c bi?t
+std::map<unsigned char, bool> keyStates;      // Trang thai phim thuong
+std::map<int, bool> specialKeyStates;         // Trang thai phim dac biet
+
+void drawLand() {
+    glColor3f(1.0f, 1.0f, 1.0f); // White
+    glBegin(GL_QUADS);
+
+    // Mat tren
+    glVertex3f(-50.0f, 0.0f, -50.0f);
+    glVertex3f(50.0f, 0.0f, -50.0f);
+    glVertex3f(50.0f, 0.0f, 50.0f);
+    glVertex3f(-50.0f, 0.0f, 50.0f);
+
+    // Mat duoi
+   	glColor3f(0.447f, 0.447f, 0.447f); // Gray
+    glVertex3f(-50.0f, -5.0f, -50.0f);
+    glVertex3f(50.0f, -5.0f, -50.0f);
+    glVertex3f(50.0f, -5.0f, 50.0f);
+    glVertex3f(-50.0f, -5.0f, 50.0f);
+
+    // Mat truoc
+    glColor3f(0.6f, 0.4f, 0.2f); // Brown
+    glVertex3f(-50.0f, 0.0f, -50.0f);
+    glVertex3f(50.0f, 0.0f, -50.0f);
+    glVertex3f(50.0f, -5.0f, -50.0f);
+    glVertex3f(-50.0f, -5.0f, -50.0f);
+
+    // Mat sau
+    glColor3f(0.6f, 0.4f, 0.2f); // Brown
+    glVertex3f(-50.0f, 0.0f, 50.0f);
+    glVertex3f(50.0f, 0.0f, 50.0f);
+    glVertex3f(50.0f, -5.0f, 50.0f);
+    glVertex3f(-30.0f, -5.0f, 50.0f);
+
+    // Mat trai
+    glColor3f(0.6f, 0.4f, 0.2f); // Brown
+    glVertex3f(-50.0f, 0.0f, -50.0f);
+    glVertex3f(-50.0f, 0.0f, 50.0f);
+    glVertex3f(-50.0f, -5.0f, 50.0f);
+    glVertex3f(-50.0f, -5.0f, -50.0f);
+
+    // Mat phai
+    glColor3f(0.6f, 0.4f, 0.2f); // Brown
+    glVertex3f(50.0f, 0.0f, -50.0f);
+    glVertex3f(50.0f, 0.0f, 50.0f);
+    glVertex3f(50.0f, -5.0f, 50.0f);
+    glVertex3f(50.0f, -5.0f, -50.0f);
+
+    glEnd();
+}
+
 void setupLighting()
 {
     GLfloat ambientLight[] = {1.0f, 0.0f, 0.0f, 1.0f}; // Ánh sáng môi truong (ambient)
@@ -43,7 +92,7 @@ void setupLighting()
 void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glShadeModel(GL_FLAT);
-	setupLighting();
+//	setupLighting();
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -92,20 +141,12 @@ void display(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
-    // Thi?t l?p góc nhìn camera
-    gluLookAt(camX, camY, camZ, 
-              camX + sin(camYaw), camY - sin(camPitch), camZ - cos(camYaw), 
-              0.0, 1.0, 0.0);
+    // Thiet lap goc nhin
+    gluLookAt(camX, camY, camZ, camX + sin(camYaw), camY - sin(camPitch), camZ - cos(camYaw), 0.0, 1.0, 0.0);
 
     // V? d?i tu?ng
     glColor3f(1.0, 1.0, 1.0);
-	glColor3f(0.2f, 0.8f, 0.2f); // Màu xanh lá
-    glBegin(GL_QUADS);           // B?t d?u v? hình t? giác
-        glVertex3f(-10.0f, -1.0f, -10.0f); // Ð?nh th? nh?t
-        glVertex3f( 10.0f, -1.0f, -10.0f); // Ð?nh th? hai
-        glVertex3f( 10.0f, -1.0f,  10.0f); // Ð?nh th? ba
-        glVertex3f(-10.0f, -1.0f,  10.0f); // Ð?nh th? tu
-    glEnd();
+	drawLand();
     glutSwapBuffers();
 }
 
