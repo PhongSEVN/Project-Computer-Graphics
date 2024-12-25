@@ -7,7 +7,7 @@
 #include <mmsystem.h>
 #include <Windows.h>
 
-float camX = 0.0f, camY = 2.0f, camZ = 5.0f;  // Vi tri camera
+float camX = 0.0f, camY = 2.0f, camZ = 10.0f;  // Vi tri camera
 float camYaw = 0.0f, camPitch = 0.0f;         // Góoc yaw và pitch
 float velocity = 0.03f;                          // Toc do di chuyen
 float rotationSpeed = 0.005f;                 // T?c d? xoay camera
@@ -44,9 +44,9 @@ void updateSnowflakes() {
     for (int i = 0; i < snowflakes.size(); ++i) {
         snowflakes[i].y -= snowflakes[i].speed;  // Roi xuong theo truc y
         if (snowflakes[i].y < -5.0f) {  // Neu tuyet da roi xuong duoi, dua nó lên lai tren cao
-            snowflakes[i].y = (rand() % 10000) / 100.0f + 5.0f;;
-            snowflakes[i].x = (rand() % 4000 - 100) / 100.0f;
-            snowflakes[i].z = (rand() % 4000 - 100) / 100.0f;
+		snowflakes[i].x = (rand() % 101) - 50.0f;  // Vi tri ngau nhien tren truc x
+        snowflakes[i].y = (rand() % 5000) / 100.0f + 5.0f;  // Vi tri ngau nhien tren truc y
+        snowflakes[i].z = (rand() % 101) - 50.0f;  // Vi tri ngau nhien tren truc z
         }
     }
 }
@@ -161,7 +161,7 @@ void setupLighting() {
 void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glShadeModel(GL_FLAT);
-//	setupLighting();
+	setupLighting();
 	generateSnowflakes(15000);
     glEnable(GL_DEPTH_TEST);
 }
@@ -525,9 +525,6 @@ void display(void) {
 	drawBox(3.7f, -5.0f, 0.0f, 35.0f, 0.1f, 0.2f, 0.9f);
 	drawBox(1.0f, -1.0f, 0.0f, 41.0f, 0.5f, 0.8f, 0.6f);
 	drawBox(4.0f, 3.0f, 0.0f, 41.0f, 0.7f, 0.8f, 0.6f);
-
-	
-	
 	drawBox(6.0f, 20.0f, 0.0f, -10.0f, 0.4f, 0.7f, 0.9f);
 	drawBox(8.0f, -35.0f, 0.0f, 5.0f, 0.5f, 0.4f, 0.3f);
 	drawBox(3.5f, 15.0f, 0.0f, 20.0f, 0.2f, 0.6f, 0.8f);
