@@ -131,33 +131,33 @@ void drawLand() {
     glEnd();
 }
 
-void setupLighting()
-{
-    GLfloat ambientLight[] = {1.0f, 0.0f, 0.0f, 1.0f}; // Ánh sáng môi truong (ambient)
-   	GLfloat diffuseLight[] = {1.0f, 1.0f, 1.0f, 1.0f}; // Ánh sáng khuech tán (diffuse)
-    GLfloat specularLight[] = {1.0f, 1.0f, 1.0f, 1.0f};// Ánh sáng phan chieu (specular)
-    GLfloat lightPosition[] = {1.0f, 1.0f, 1.0f, 0.0f}; // Vi tri nguon sang
+void setupLighting() {
+    // Dinh nghia anh sang moi truong
+    GLfloat ambientLight[] = {0.5f, 0.5f, 0.5f, 1.0f}; // Anh sang moi truong
+    GLfloat diffuseLight[] = {1.0f, 1.0f, 1.0f, 1.0f}; // Anh sang khuech tan
+    GLfloat specularLight[] = {0.5f, 0.5f, 0.5f, 1.0f}; // Anh sang phan xa
+    GLfloat lightPosition[] = {0.0f, 00.0f, 40.0f, 1.0f}; // Vi tri nguon sang
 
-    // Thi?t l?p ánh sáng môi tru?ng và khu?ch tán
+    // Cai dat anh sang cho GL_LIGHT0
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
-
-    // B?t ngu?n sáng
+    // Bat anh sang
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-    // Thi?t l?p v?t li?u: Ð?c di?m ph?n chi?u specular c?a v?t li?u
-    GLfloat mat_specular[] = {1.0f, 0.0f, 0.0f, 1.0f};
-	GLfloat mat_shininess[] = {50.0f};
+    // Bat tinh nang chinh sua tu dong anh sang
+    glEnable(GL_COLOR_MATERIAL);
 
-
+    // Thiet lap thuoc tinh phan chieu anh sang cua vat lieu
+    GLfloat mat_specular[] = {0.5f, 0.5f, 0.5f, 1.0f};
+    GLfloat mat_shininess[] = {25.0f};
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 }
+
 void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glShadeModel(GL_FLAT);
@@ -209,6 +209,7 @@ void update() {
 
 // Ham ve nguoi tuyet
 void drawSnowman() {
+	
     // Thuoc tinh
     float bodyRadius = 2.0f;
     float middleRadius = 1.5f;
@@ -387,7 +388,7 @@ void drawTree() {
 void drawHouse() {
 	glPushMatrix(); // Luu trang thai hien tai
     glTranslatef(3.0f, 0.0f, 0.0f);
-	
+	glScalef(3.0, 3.0, 3.0);
     // Than nha (hinh hop)
     glColor3f(0.8f, 0.2f, 0.2f); // Mau do
     glBegin(GL_QUADS);
@@ -450,6 +451,50 @@ void drawHouse() {
     glPopMatrix();
 }
 
+// Ham ve hop qua
+void drawBox(float scale, float posX, float posY, float posZ, float r, float g, float b) {
+    // Hop qua chinh (hinh lap phuong)
+    glPushMatrix();
+    glTranslatef(posX, posY, posZ); // Setup vi tri cho hop qua
+    glScalef(scale, scale, scale);
+    glColor3f(r, g, b); // Color
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    // Nap hop qua
+    glPushMatrix();
+    glTranslatef(posX, posY + scale * 0.6f, posZ);
+    glScalef(scale * 1.1f, scale * 0.2f, scale * 1.1f);
+    glColor3f(r, r, b); // Random color
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    // Dai ruy bang ngang
+    glPushMatrix();
+    glTranslatef(posX, posY, posZ);
+    glScalef(scale * 0.2f, scale * 1.2f, scale);
+    glColor3f(b, r, g); // Random color
+    glutSolidCube(1.2f);
+    glPopMatrix();
+
+    // Dai ruy bang ngang
+    glPushMatrix();
+    glTranslatef(posX, posY, posZ); // Gi? ? v? trí h?p
+    glScalef(scale, scale * 1.2f, scale * 0.2f);
+    glColor3f(b, r, g); // Random color
+    glutSolidCube(1.2f);
+    glPopMatrix();
+
+    // No tren hop qua
+    glPushMatrix();
+    glTranslatef(posX, posY + scale * 0.7f, posZ);
+    glScalef(scale * 0.4f, scale * 0.2f, scale * 0.4f);
+    glColor3f(g, b, r); // Random color
+    glutSolidSphere(0.5f, 20, 20);
+    glPopMatrix();
+}
+
+
 void display(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -457,13 +502,66 @@ void display(void) {
     // Thiet lap goc nhin
     gluLookAt(camX, camY, camZ, camX + sin(camYaw), camY - sin(camPitch), camZ - cos(camYaw), 0.0, 1.0, 0.0);
 
-    // V? d?i tu?ng
+    // Ve doi tuong
     glColor3f(1.0, 1.0, 1.0);
 	drawLand();
 	drawHouse();
 	drawTree();
 	updateSnowflakes(); 
 	drawSnowflakes();
+    drawBox(10.0f, -20.0f, 0.0f, -20.0f, 1.0f, 0.0f, 0.0f);
+	drawBox(4.0f, -10.0f, 0.0f, -20.0f, 0.5f, 1.0f, 0.0f);
+	drawBox(1.2f, -1.0f, 0.0f, -16.0f, 0.4f, 0.5f, 1.0f);
+	drawBox(7.5f, -15.0f, 0.0f, -10.0f, 0.8f, 0.2f, 0.5f);
+	drawBox(12.0f, -25.0f, 0.0f, -30.0f, 0.9f, 0.6f, 0.1f);
+	drawBox(5.0f, -10.0f, 0.0f, -5.0f, 0.2f, 0.7f, 0.8f);
+	drawBox(8.0f, -18.0f, 0.0f, -22.0f, 0.4f, 0.6f, 0.9f);
+	drawBox(6.0f, -12.0f, 0.0f, -8.0f, 0.1f, 0.9f, 0.4f);
+	drawBox(11.0f, -20.0f, 0.0f, -15.0f, 0.3f, 0.5f, 1.0f);
+	drawBox(9.5f, -14.0f, 0.0f, -25.0f, 0.7f, 0.3f, 0.2f);
+	drawBox(3.0f, -6.0f, 0.0f, -18.0f, 1.0f, 0.0f, 0.0f);
+	drawBox(2.5f, -5.0f, 0.0f, -12.0f, 0.6f, 0.4f, 0.9f);
+	drawBox(6.0f, -10.0f, 0.0f, 40.0f, 0.4f, 0.1f, 0.9f);
+	drawBox(3.7f, -5.0f, 0.0f, 35.0f, 0.1f, 0.2f, 0.9f);
+	drawBox(1.0f, -1.0f, 0.0f, 41.0f, 0.5f, 0.8f, 0.6f);
+	drawBox(4.0f, 3.0f, 0.0f, 41.0f, 0.7f, 0.8f, 0.6f);
+
+	
+	
+	drawBox(6.0f, 20.0f, 0.0f, -10.0f, 0.4f, 0.7f, 0.9f);
+	drawBox(8.0f, -35.0f, 0.0f, 5.0f, 0.5f, 0.4f, 0.3f);
+	drawBox(3.5f, 15.0f, 0.0f, 20.0f, 0.2f, 0.6f, 0.8f);
+	drawBox(5.0f, -45.0f, 0.0f, -5.0f, 0.3f, 0.1f, 0.7f);
+	drawBox(4.5f, 30.0f, 0.0f, 10.0f, 0.6f, 0.9f, 0.5f);
+	drawBox(7.0f, -20.0f, 0.0f, 15.0f, 0.8f, 0.5f, 0.4f);
+	drawBox(9.0f, 12.0f, 0.0f, 25.0f, 0.7f, 0.2f, 0.1f);
+	drawBox(2.0f, -40.0f, 0.0f, -10.0f, 0.3f, 0.8f, 0.6f);
+	drawBox(10.0f, -10.0f, 0.0f, -30.0f, 0.6f, 0.9f, 0.2f);
+	drawBox(1.5f, 5.0f, 0.0f, 18.0f, 0.9f, 0.1f, 0.5f);
+	drawBox(6.5f, 25.0f, 0.0f, -15.0f, 0.5f, 0.6f, 0.7f);
+	drawBox(11.0f, -30.0f, 0.0f, 3.0f, 0.8f, 0.3f, 0.4f);
+	drawBox(30.0f, 25.0f, 0.0f, -35.0f, 0.7f, 0.8f, 0.9f);
+	drawBox(4.8f, -50.0f, 0.0f, 12.0f, 0.5f, 0.4f, 0.6f);
+	drawBox(12.0f, 2.0f, 0.0f, -20.0f, 0.6f, 0.7f, 0.3f);
+	drawBox(3.0f, -28.0f, 0.0f, 9.0f, 0.7f, 0.8f, 0.2f);
+	drawBox(9.5f, 18.0f, 0.0f, 21.0f, 0.9f, 0.1f, 0.5f);
+	drawBox(4.0f, 7.0f, 0.0f, -12.0f, 0.3f, 0.4f, 0.8f);
+	drawBox(6.0f, -10.0f, 0.0f, -18.0f, 0.5f, 0.2f, 0.6f);
+	drawBox(5.5f, 35.0f, 0.0f, 6.0f, 0.6f, 0.9f, 0.3f);
+	drawBox(8.0f, -15.0f, 0.0f, 30.0f, 0.8f, 0.3f, 0.2f);
+	drawBox(2.5f, -25.0f, 0.0f, 22.0f, 0.4f, 0.7f, 0.5f);
+	drawBox(7.3f, 0.0f, 0.0f, -50.0f, 0.1f, 0.9f, 0.7f);
+	drawBox(10.5f, 9.0f, 0.0f, 40.0f, 0.2f, 0.5f, 0.3f);
+	drawBox(4.0f, -7.0f, 0.0f, 12.0f, 0.9f, 0.4f, 0.8f);
+	drawBox(3.8f, 22.0f, 0.0f, 13.0f, 0.5f, 0.6f, 0.9f);
+	drawBox(6.5f, 19.0f, 0.0f, 29.0f, 0.7f, 0.4f, 0.1f);
+	drawBox(8.0f, -10.0f, 0.0f, -25.0f, 0.8f, 0.6f, 0.4f);
+	drawBox(7.5f, 28.0f, 0.0f, 19.0f, 0.5f, 0.3f, 0.8f);
+	drawBox(6.2f, -12.0f, 0.0f, -6.0f, 0.6f, 0.9f, 0.2f);
+	drawBox(10.0f, -33.0f, 0.0f, -11.0f, 0.4f, 0.3f, 0.5f);
+	drawBox(9.0f, 20.0f, 0.0f, 5.0f, 0.6f, 0.9f, 0.8f);
+
+	
 	drawSnowman();
     glutSwapBuffers();
     
