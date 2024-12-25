@@ -381,6 +381,74 @@ void drawTree() {
 }
 
 
+void drawGiftBox1(float scale) {
+    glPushMatrix();
+
+    glTranslatef(-5.0f, 17.0f, 0.0f);
+
+    // Phong to hop qua
+    glScalef(scale, scale, scale);
+
+    // Than hop qua
+    glColor3f(1.0f, 0.0f, 0.0f); // Color
+    glBegin(GL_QUADS);
+    // Mat truoc
+    glVertex3f(-1.0f, -1.0f, 1.0f);
+    glVertex3f(1.0f, -1.0f, 1.0f);
+    glVertex3f(1.0f, 1.0f, 1.0f);
+    glVertex3f(-1.0f, 1.0f, 1.0f);
+    // Mat sau
+    glVertex3f(-1.0f, -1.0f, -1.0f);
+    glVertex3f(1.0f, -1.0f, -1.0f);
+    glVertex3f(1.0f, 1.0f, -1.0f);
+    glVertex3f(-1.0f, 1.0f, -1.0f);
+    // Mat trai
+    glVertex3f(-1.0f, -1.0f, -1.0f);
+    glVertex3f(-1.0f, -1.0f, 1.0f);
+    glVertex3f(-1.0f, 1.0f, 1.0f);
+    glVertex3f(-1.0f, 1.0f, -1.0f);
+    // Mat phai
+    glVertex3f(1.0f, -1.0f, -1.0f);
+    glVertex3f(1.0f, -1.0f, 1.0f);
+    glVertex3f(1.0f, 1.0f, 1.0f);
+    glVertex3f(1.0f, 1.0f, -1.0f);
+    // Mat duoi
+    glVertex3f(-1.0f, -1.0f, -1.0f);
+    glVertex3f(1.0f, -1.0f, -1.0f);
+    glVertex3f(1.0f, -1.0f, 1.0f);
+    glVertex3f(-1.0f, -1.0f, 1.0f);
+    // Mat tren
+    glVertex3f(-1.0f, 1.0f, -1.0f);
+    glVertex3f(1.0f, 1.0f, -1.0f);
+    glVertex3f(1.0f, 1.0f, 1.0f);
+    glVertex3f(-1.0f, 1.0f, 1.0f);
+    glEnd();
+
+    // Trang tri
+    glColor3f(1.0f, 1.0f, 0.0f); // Color
+
+    // Ngang
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, 1.01f);
+    glScalef(1.5f, 0.1f, 0.1f);
+    glutSolidCube(0.5f);
+    glPopMatrix();
+
+    // Doc
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, 1.01f);
+    glScalef(0.1f, 1.5f, 0.1f);
+    glutSolidCube(0.5f);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, 1.02f); 
+    glScalef(0.1f, 1.5f, 1.5f);
+    glutSolidCube(0.5f);
+    glPopMatrix();
+
+    glPopMatrix();
+}
 
 
 void drawHouse() {
@@ -465,6 +533,7 @@ void display(void) {
 	drawSnowflakes();
 	drawSnowman();
     glutSwapBuffers();
+    
 }
 
 void reshape(int w, int h) {
