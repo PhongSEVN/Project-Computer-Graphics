@@ -4,6 +4,8 @@
 #include <gl/glut.h>
 #include <map>
 #include <vector>
+#include <mmsystem.h>
+#include <Windows.h>
 
 float camX = 0.0f, camY = 2.0f, camZ = 5.0f;  // Vi tri camera
 float camYaw = 0.0f, camPitch = 0.0f;         // Góoc yaw và pitch
@@ -381,75 +383,6 @@ void drawTree() {
 }
 
 
-void drawGiftBox1(float scale) {
-    glPushMatrix();
-
-    glTranslatef(-5.0f, 17.0f, 0.0f);
-
-    // Phong to hop qua
-    glScalef(scale, scale, scale);
-
-    // Than hop qua
-    glColor3f(1.0f, 0.0f, 0.0f); // Color
-    glBegin(GL_QUADS);
-    // Mat truoc
-    glVertex3f(-1.0f, -1.0f, 1.0f);
-    glVertex3f(1.0f, -1.0f, 1.0f);
-    glVertex3f(1.0f, 1.0f, 1.0f);
-    glVertex3f(-1.0f, 1.0f, 1.0f);
-    // Mat sau
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f(1.0f, -1.0f, -1.0f);
-    glVertex3f(1.0f, 1.0f, -1.0f);
-    glVertex3f(-1.0f, 1.0f, -1.0f);
-    // Mat trai
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f, 1.0f);
-    glVertex3f(-1.0f, 1.0f, 1.0f);
-    glVertex3f(-1.0f, 1.0f, -1.0f);
-    // Mat phai
-    glVertex3f(1.0f, -1.0f, -1.0f);
-    glVertex3f(1.0f, -1.0f, 1.0f);
-    glVertex3f(1.0f, 1.0f, 1.0f);
-    glVertex3f(1.0f, 1.0f, -1.0f);
-    // Mat duoi
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f(1.0f, -1.0f, -1.0f);
-    glVertex3f(1.0f, -1.0f, 1.0f);
-    glVertex3f(-1.0f, -1.0f, 1.0f);
-    // Mat tren
-    glVertex3f(-1.0f, 1.0f, -1.0f);
-    glVertex3f(1.0f, 1.0f, -1.0f);
-    glVertex3f(1.0f, 1.0f, 1.0f);
-    glVertex3f(-1.0f, 1.0f, 1.0f);
-    glEnd();
-
-    // Trang tri
-    glColor3f(1.0f, 1.0f, 0.0f); // Color
-
-    // Ngang
-    glPushMatrix();
-    glTranslatef(0.0f, 0.0f, 1.01f);
-    glScalef(1.5f, 0.1f, 0.1f);
-    glutSolidCube(0.5f);
-    glPopMatrix();
-
-    // Doc
-    glPushMatrix();
-    glTranslatef(0.0f, 0.0f, 1.01f);
-    glScalef(0.1f, 1.5f, 0.1f);
-    glutSolidCube(0.5f);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0.0f, 0.0f, 1.02f); 
-    glScalef(0.1f, 1.5f, 1.5f);
-    glutSolidCube(0.5f);
-    glPopMatrix();
-
-    glPopMatrix();
-}
-
 
 void drawHouse() {
 	glPushMatrix(); // Luu trang thai hien tai
@@ -578,6 +511,8 @@ void motion(int x, int y) {
 }
 
 int main(int argc, char** argv) {
+	
+	PlaySound(TEXT("noel.wav"), NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutCreateWindow("Noel Scene");
