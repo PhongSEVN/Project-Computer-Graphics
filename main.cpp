@@ -204,6 +204,90 @@ void update() {
 	
     glutPostRedisplay();
 }
+
+// Ham ve nguoi tuyet
+void drawSnowman() {
+    // Thuoc tinh
+    float bodyRadius = 2.0f;
+    float middleRadius = 1.5f;
+    float headRadius = 1.0f;
+    
+    glColor3f( 0.9f, 0.9f, 0.9f); // Grey
+    // Ve than nguoi tuyet
+    glPushMatrix();
+    glTranslatef(-8.0f, 1.5f, -5.0f); // Dich chuyen vi tri phan than
+    glutSolidSphere(bodyRadius, 50, 50); // Ve phan than
+    glPopMatrix();
+
+    // Ve phan giua nguoi tuyet
+    glPushMatrix();
+    glTranslatef(-8.0f, 4.0f, -5.0f); // Dich chuyen vi tri phan giua
+    glutSolidSphere(middleRadius, 50, 50); // Ve phan giua
+    glPopMatrix();
+
+    // Ve dau nguoi tuyet
+    glPushMatrix();
+    glTranslatef(-8.0f, 6.0f, -5.0f); // Dich chuyen vi tri phan dau
+    glutSolidSphere(headRadius, 50, 50); // Ve phan dau
+    glPopMatrix();
+
+    // Ve mat
+    glPushMatrix();
+    glTranslatef(-8.0f, 6.0f, -4.0f); // Dich chuyen mat trai
+    glColor3f(0.0f, 0.0f, 0.0f); // Black
+    glutSolidSphere(0.1f, 10, 10);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-7.4f, 6.0f, -4.2f); // Dich chuyen mat trai
+    glColor3f(0.0f, 0.0f, 0.0f); // Black
+    glutSolidSphere(0.1f, 10, 10);
+    glPopMatrix();
+
+    // Ve mui
+    glPushMatrix();
+    glTranslatef(-7.7f, 6.0f, -4.0f); // Dich chuyen mui
+    glColor3f(1.0f, 0.5f, 0.0f); // Orange
+    glRotatef(90.0f, 1.0f, 0.0f, 0.0f); // Xoay mui
+    glutSolidCone(0.2f, 0.5f, 10, 10); // Ve mui hinh non
+    glPopMatrix();
+
+    // Ve cuc ao
+    glColor3f(0.0f, 0.0f, 0.0f); // Black
+    glPushMatrix();
+    glTranslatef(-7.35f, 4.0f, -3.7f); // Dich chuyen cuc ao dau tien
+    glutSolidSphere(0.1f, 10, 10); // Cuc dau tien
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-7.35f, 3.3f, -3.75f); // Dich chuyen cuc ao thu hai
+    glutSolidSphere(0.1f, 10, 10); // Cuc thu hai
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-7.35f, 2.6f, -3.5f); // Dich chuyen cuc ao thu ba
+    glutSolidSphere(0.1f, 10, 10); // Cuc thu ba
+    glPopMatrix();
+
+    // Ve tay phai
+    glPushMatrix();
+    glTranslatef(-9.5f, 4.5f, -5.0f); // Dich chuyen
+    glRotatef(90.0f, 0.0f, 0.0f, 1.0f); // Xoay tay
+    glColor3f(0.5f, 0.25f, 0.0f); // Brown
+    glutSolidCone(0.5f, 5.0f, 10, 10); // Ve tay
+    glPopMatrix();
+
+    // Ve tay trai
+    glPushMatrix();
+    glTranslatef(-7.0f, 4.5f, -5.0f); // Dich chuyen
+    glRotatef(90.0f, 0.0f, 0.0f, 1.0f); // Xoay tay
+    glColor3f(0.5f, 0.25f, 0.0f); // Brown
+    glutSolidCone(0.5f, 5.0f, 10, 10); // Ve tay
+    glPopMatrix();
+}
+
+
+
 // Hàm ve hinh tru (than cay)
 void drawCylinder() {
     glColor3f(0.6f, 0.3f, 0.1f); // Brown
@@ -379,6 +463,7 @@ void display(void) {
 	drawTree();
 	updateSnowflakes(); 
 	drawSnowflakes();
+	drawSnowman();
     glutSwapBuffers();
 }
 
