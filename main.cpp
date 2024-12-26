@@ -8,11 +8,11 @@
 #include <Windows.h>
 
 float camX = 0.0f, camY = 2.0f, camZ = 10.0f;  // Vi tri camera
-float camYaw = 0.0f, camPitch = 0.0f;         // Góoc yaw và pitch
+float camYaw = 0.0f, camPitch = 0.0f;         // G?oc yaw v? pitch
 float velocity = 0.03f;                          // Toc do di chuyen
 float rotationSpeed = 0.005f;                 // T?c d? xoay camera
-bool isLeftMousePressed = false;              // Tr?ng thái nh?n chu?t trái
-int lastMouseX, lastMouseY;                   // V? trí chu?t tru?c dó
+bool isLeftMousePressed = false;              // Tr?ng th?i nh?n chu?t tr?i
+int lastMouseX, lastMouseY;                   // V? tr? chu?t tru?c d?
 
 std::map<unsigned char, bool> keyStates;      // Trang thai phim thuong
 std::map<int, bool> specialKeyStates;         // Trang thai phim dac biet
@@ -43,7 +43,7 @@ void generateSnowflakes(int numSnowflakes) {
 void updateSnowflakes() {
     for (int i = 0; i < snowflakes.size(); ++i) {
         snowflakes[i].y -= snowflakes[i].speed;  // Roi xuong theo truc y
-        if (snowflakes[i].y < -5.0f) {  // Neu tuyet da roi xuong duoi, dua nó lên lai tren cao
+        if (snowflakes[i].y < -5.0f) {  // Neu tuyet da roi xuong duoi, dua n? l?n lai tren cao
 		snowflakes[i].x = (rand() % 101) - 50.0f;  // Vi tri ngau nhien tren truc x
         snowflakes[i].y = (rand() % 5000) / 100.0f + 5.0f;  // Vi tri ngau nhien tren truc y
         snowflakes[i].z = (rand() % 101) - 50.0f;  // Vi tri ngau nhien tren truc z
@@ -168,7 +168,7 @@ void init(void) {
 
 void handleKeyboardDown(unsigned char key, int x, int y) {
     keyStates[key] = true;
-    if (key == 27) exit(0);  // ESC d? thoát
+    if (key == 27) exit(0);  // ESC d? tho?t
 }
 
 void handleKeyboardUp(unsigned char key, int x, int y) {
@@ -208,90 +208,65 @@ void update() {
 }
 
 // Ham ve nguoi tuyet
-void drawSnowman() {
-	
-    // Thuoc tinh
-    float bodyRadius = 2.0f;
-    float middleRadius = 1.5f;
-    float headRadius = 1.0f;
-    
-    glColor3f( 0.9f, 0.9f, 0.9f); // Grey
+void drawSnowman(float scale, float posX, float posY, float posZ) {
+	glColor3f(0.9f, 0.9f, 0.9f); // Grey
+
     // Ve than nguoi tuyet
     glPushMatrix();
-    glTranslatef(-8.0f, 1.5f, -5.0f); // Dich chuyen vi tri phan than
-    glutSolidSphere(bodyRadius, 50, 50); // Ve phan than
+    glTranslatef(posX, posY, posZ);
+    glutSolidSphere(scale, 50, 50);
     glPopMatrix();
 
     // Ve phan giua nguoi tuyet
     glPushMatrix();
-    glTranslatef(-8.0f, 4.0f, -5.0f); // Dich chuyen vi tri phan giua
-    glutSolidSphere(middleRadius, 50, 50); // Ve phan giua
+    glTranslatef(posX, posY + scale * 1.5f, posZ);
+    glutSolidSphere(scale * 0.75f, 50, 50);
     glPopMatrix();
 
     // Ve dau nguoi tuyet
     glPushMatrix();
-    glTranslatef(-8.0f, 6.0f, -5.0f); // Dich chuyen vi tri phan dau
-    glutSolidSphere(headRadius, 50, 50); // Ve phan dau
+    glTranslatef(posX, posY + scale * 2.5f, posZ);
+    glutSolidSphere(scale * 0.5f, 50, 50);
     glPopMatrix();
 
     // Ve mat
-    glPushMatrix();
-    glTranslatef(-8.0f, 6.0f, -4.0f); // Dich chuyen mat trai
     glColor3f(0.0f, 0.0f, 0.0f); // Black
-    glutSolidSphere(0.1f, 10, 10);
+    glPushMatrix();
+    glTranslatef(posX - scale * 0.15f, posY + scale * 2.7f, posZ + scale * 0.4f); // Left
+    glutSolidSphere(scale * 0.05f, 10, 10);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(-7.4f, 6.0f, -4.2f); // Dich chuyen mat trai
-    glColor3f(0.0f, 0.0f, 0.0f); // Black
-    glutSolidSphere(0.1f, 10, 10);
+    glTranslatef(posX + scale * 0.15f, posY + scale * 2.7f, posZ + scale * 0.4f); // Right
+    glutSolidSphere(scale * 0.05f, 10, 10);
     glPopMatrix();
 
     // Ve mui
-    glPushMatrix();
-    glTranslatef(-7.7f, 6.0f, -4.0f); // Dich chuyen mui
     glColor3f(1.0f, 0.5f, 0.0f); // Orange
-    glRotatef(90.0f, 1.0f, 0.0f, 0.0f); // Xoay mui
-    glutSolidCone(0.2f, 0.5f, 10, 10); // Ve mui hinh non
+    glPushMatrix();
+    glTranslatef(posX, posY + scale * 2.6f, posZ + scale * 0.5f - 1.0f);
+    glRotatef(5.0f, 1.0f, 0.0f, 0.0f);
+    glutSolidCone(scale * 0.1f, scale * 0.7f, 10, 10);
     glPopMatrix();
 
-    // Ve cuc ao
-    glColor3f(0.0f, 0.0f, 0.0f); // Black
-    glPushMatrix();
-    glTranslatef(-7.35f, 4.0f, -3.7f); // Dich chuyen cuc ao dau tien
-    glutSolidSphere(0.1f, 10, 10); // Cuc dau tien
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(-7.35f, 3.3f, -3.75f); // Dich chuyen cuc ao thu hai
-    glutSolidSphere(0.1f, 10, 10); // Cuc thu hai
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(-7.35f, 2.6f, -3.5f); // Dich chuyen cuc ao thu ba
-    glutSolidSphere(0.1f, 10, 10); // Cuc thu ba
-    glPopMatrix();
-
-    // Ve tay phai
-    glPushMatrix();
-    glTranslatef(-9.5f, 4.5f, -5.0f); // Dich chuyen
-    glRotatef(90.0f, 0.0f, 0.0f, 1.0f); // Xoay tay
+    // Ve tay
     glColor3f(0.5f, 0.25f, 0.0f); // Brown
-    glutSolidCone(0.5f, 5.0f, 10, 10); // Ve tay
+    glPushMatrix();
+    glTranslatef(posX - scale * 0.8f, posY + scale * 1.5f, posZ); // Right
+    glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+    glutSolidCone(scale * 0.1f, scale, 10, 10);
     glPopMatrix();
 
-    // Ve tay trai
     glPushMatrix();
-    glTranslatef(-7.0f, 4.5f, -5.0f); // Dich chuyen
-    glRotatef(90.0f, 0.0f, 0.0f, 1.0f); // Xoay tay
-    glColor3f(0.5f, 0.25f, 0.0f); // Brown
-    glutSolidCone(0.5f, 5.0f, 10, 10); // Ve tay
+    glTranslatef(posX + scale * 0.8f, posY + scale * 1.5f, posZ); // Left
+    glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+    glutSolidCone(scale * 0.1f, scale, 10, 10);
     glPopMatrix();
 }
 
 
 
-// Hàm ve hinh tru (than cay)
+// H?m ve hinh tru (than cay)
 void drawCylinder() {
     glColor3f(0.6f, 0.3f, 0.1f); // Brown
     GLUquadric *quad = gluNewQuadric();
@@ -326,7 +301,7 @@ void drawStar(float size) {
     glVertex2f(0.0f, 0.0f);
 
     for (int i = 0; i <= 10; i++) {
-        float angle = i * M_PI / 5.0; // 5 cánh = 10 diem
+        float angle = i * M_PI / 5.0; // 5 c?nh = 10 diem
         float radius = (i % 2 == 0) ? size : size / 2.5;
         glVertex2f(radius * cos(angle), radius * sin(angle));
     }
@@ -336,7 +311,7 @@ void drawStar(float size) {
 
     starAngle += 0.1f; // Cap nhat goc quay
     if (starAngle > 360.0f) {
-        starAngle -= 360.0f; // Ðam bao goc quay luon trong pham vi 0-360 do
+        starAngle -= 360.0f; // ?am bao goc quay luon trong pham vi 0-360 do
     }
 }
 
@@ -420,7 +395,7 @@ void drawHouse() {
     glEnd();
 
     // Mai nha (hinh chop)
-    glColor3f(0.6f, 0.4f, 0.2f); // Màu nâu
+    glColor3f(0.6f, 0.4f, 0.2f); // M?u n?u
     glBegin(GL_TRIANGLES);
     // Mai phia truoc
     glVertex3f(-2.0f, 3.0f, 2.0f);
@@ -440,7 +415,7 @@ void drawHouse() {
     glVertex3f(0.0f, 5.0f, 0.0f);
     
     // Ve cua
-	glColor3f(0.5f, 0.2f, 0.0f); // Màu nâu
+	glColor3f(0.5f, 0.2f, 0.0f); // M?u n?u
 	glBegin(GL_QUADS);
 	glVertex3f(-2.01f, 0.0f, 0.5f);
 	glVertex3f(-2.01f, 0.0f, -0.5f);
@@ -479,7 +454,7 @@ void drawBox(float scale, float posX, float posY, float posZ, float r, float g, 
 
     // Dai ruy bang ngang
     glPushMatrix();
-    glTranslatef(posX, posY, posZ); // Gi? ? v? trí h?p
+    glTranslatef(posX, posY, posZ); // Gi? ? v? tr? h?p
     glScalef(scale, scale * 1.2f, scale * 0.2f);
     glColor3f(b, r, g); // Random color
     glutSolidCube(1.2f);
@@ -495,7 +470,7 @@ void drawBox(float scale, float posX, float posY, float posZ, float r, float g, 
 }
 
 
-void display(void) {
+void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
@@ -559,7 +534,7 @@ void display(void) {
 	drawBox(9.0f, 20.0f, 0.0f, 5.0f, 0.6f, 0.9f, 0.8f);
 
 	
-	drawSnowman();
+	drawSnowman(2.0f,-8.0f, 1.5f, -5.0f);
     glutSwapBuffers();
     
 }
@@ -572,7 +547,7 @@ void reshape(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-// X? lý s? ki?n chu?t
+// X? l? s? ki?n chu?t
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON) {
         if (state == GLUT_DOWN) {
@@ -585,7 +560,7 @@ void mouse(int button, int state, int x, int y) {
     }
 }
 
-// X? lý s? ki?n di chuy?n chu?t
+// X? l? s? ki?n di chuy?n chu?t
 void motion(int x, int y) {
     if (isLeftMousePressed) {
         int deltaX = x - lastMouseX;
@@ -594,7 +569,7 @@ void motion(int x, int y) {
         camYaw += deltaX * rotationSpeed;
         camPitch -= deltaY * rotationSpeed;
 
-        // Gi?i h?n pitch d? tránh l?t camera
+        // Gi?i h?n pitch d? tr?nh l?t camera
         if (camPitch > M_PI / 2.0f) camPitch = M_PI / 2.0f;
         if (camPitch < -M_PI / 2.0f) camPitch = -M_PI / 2.0f;
 
