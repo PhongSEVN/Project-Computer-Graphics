@@ -203,7 +203,12 @@ void update() {
     }
     if (keyStates[' ']) camY +=velocity;  // Len cao khi nhan Space
     if (keyStates['c']) camY -=velocity;  // Xuong thap khi nhan c
-	
+    
+	starAngle += 0.1f; // Cap nhat goc quay
+    if (starAngle > 360.0f) 
+	{
+        starAngle -= 360.0f; // Dam bao goc quay luon trong pham vi 0-360 do
+    }
     glutPostRedisplay();
 }
 
@@ -264,98 +269,80 @@ void drawSnowman(float scale, float posX, float posY, float posZ) {
     glPopMatrix();
 }
 
-
-
-// H?m ve hinh tru (than cay)
-void drawCylinder() {
+// Ve cay thong
+void drawTree(float scale, int layers, float posX, float posY, float posZ)
+{	
+    // Ve than cay
+    glPushMatrix();
     glColor3f(0.6f, 0.3f, 0.1f); // Brown
     GLUquadric *quad = gluNewQuadric();
-    glPushMatrix();
-    glTranslatef(-5.0f, 17.0f, -1.0f);
-
-    glRotatef(270.0f, 1.0f, 0.0f, 0.0f);
-    glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
-    gluCylinder(quad, 3.0f, 3.0f, 10.0f, 50, 10);
-    glPopMatrix();
+    glTranslatef(posX, 0.0f, posZ);
+    glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+    gluCylinder(quad, scale * 0.4f, scale * 0.3f, scale * 2.0f, 50, 10);
     gluDeleteQuadric(quad);
-}
-
-// Ham ve hinh non (canh cay)
-void drawCone(float baseRadius, float height, float red, float green, float blue) {
-    glColor3f(red, green, blue); // Thiet lap mau
-    glPushMatrix();
-    glutSolidCone(baseRadius, height, 50, 50);
+    glDisable(GL_LIGHTING);
     glPopMatrix();
-}
+    
+    // Ve la cay
+	glPushMatrix();
+	glTranslatef(posX, scale * 0.3f, posZ); // Dich chuyen vi tri goc cay
+	glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
 
-// Ham ve ngoi sao tren dinh cay
-void drawStar(float size) {
-    glPushMatrix();
-    glTranslatef(0.0, 0.0, 40.0);
+	int color = 0;
+	for (int i = 0; i < layers; i++)
+	{
+    	if (i == 0)
+    	{
+        	continue;
+    	}
+
+    	float height = scale * (float)(i + 1); // Chieu cao cua moi tang la
+    	float scaleFactor = 1.0f - (float)i / (layers + 2);
+
+    	float leafPosY = scale * i * 0.75f;
+
+    	glPushMatrix();
+    	glTranslatef(0.0f, 0.0f, leafPosY);
+
+    	if (i < 4)
+    	{
+        	color++;
+    	}
+    	glColor3f(0.0f, 0.7f - 0.1f * color, 0.0f); // Green
+
+    	// Ve hình nón (lá cây)
+    	glutSolidCone(scale * 1.5 * scaleFactor, height * scaleFactor, 50, 50);
+
+    	glPopMatrix();
+	}
+	glPopMatrix();
+
+	if( scale < 5)
+	{
+	}
+	else
+	{
+	// Ve ngoi sao tren dinh
+	glPushMatrix();
+	glTranslatef(posX, scale * 2.0f + layers * scale * 1.0f, posZ);
+
     glRotatef(starAngle, 0.0f, 0.0f, 1.0f); // Xoay ngoi sao theo goc
-
     glBegin(GL_TRIANGLE_FAN); // Bat dau ve ngoi sao
     glColor3f(1.0, 1.0, 0.0); // Yellow
-    
+
     // Tam giac giua ngoi sao
     glVertex2f(0.0f, 0.0f);
-
-    for (int i = 0; i <= 10; i++) {
-        float angle = i * M_PI / 5.0; // 5 c?nh = 10 diem
-        float radius = (i % 2 == 0) ? size : size / 2.5;
+	
+    for (int i = 0; i <= 10; i++)
+	{
+        float angle = i * M_PI / 5.0; // 5 canh = 10 diem
+        float radius = (i % 2 == 0) ? 10 : 10 / 2.5;
         glVertex2f(radius * cos(angle), radius * sin(angle));
     }
-
     glEnd();
-    glPopMatrix();
-
-    starAngle += 0.1f; // Cap nhat goc quay
-    if (starAngle > 360.0f) {
-        starAngle -= 360.0f; // ?am bao goc quay luon trong pham vi 0-360 do
-    }
-}
-
-
-
-void drawTree() {
-    glPushMatrix();
-
-    glRotatef(270.0f, 1.0f, 0.0f, 0.0f);
-    // Ve than cay
-    drawCylinder();
-
-    glTranslatef(-5.0f, 17.0f, 8.99f);
-
-    // Ve lop la thu nhat
-    glPushMatrix();
-    drawCone(10.0f, 10.0f, 0.0f, 0.5f, 0.0f);
-    glPopMatrix();
-
-    // Ve lop la thu hai
-    glPushMatrix();
-    glTranslatef(0.0f, 0.0f, 2.5f);
-    drawCone(8.0f, 20.0f, 0.0f, 0.7f, 0.0f);
-    glPopMatrix();
-
-    // Ve lop la thu ba
-    glPushMatrix();
-    glTranslatef(0.0f, 0.0f, 4.5f);
-    drawCone(6.0f, 30.0f, 0.0f, 0.9f, 0.0f);
-    glPopMatrix();
-
-    // Ve lop la thu tu
-    glPushMatrix();
-    glTranslatef(0.0f, 0.0f, 6.0f);
-    drawCone(4.0f, 40.0f, 0.0f, 1.0f, 0.0f);
-    glPopMatrix();
-
-    // Ve ngoi sao tren dinh
-    glPushMatrix();
-    glTranslatef(0.0f, 0.0f, 7.5f); // Dich len tren cung
-    drawStar(10.0);
-    glPopMatrix();
 
     glPopMatrix();
+	}
 }
 
 
@@ -481,7 +468,9 @@ void display() {
     glColor3f(1.0, 1.0, 1.0);
 	drawLand();
 	drawHouse();
-	drawTree();
+	drawTree(2.0f, 6, 10.0f, 2.0f, 10.0f);
+	drawTree(10.0f, 6, -37.0f, 40.0f, 30.0f);
+
 	updateSnowflakes(); 
 	drawSnowflakes();
     drawBox(10.0f, -20.0f, 0.0f, -20.0f, 1.0f, 0.0f, 0.0f);
@@ -534,7 +523,7 @@ void display() {
 	drawBox(9.0f, 20.0f, 0.0f, 5.0f, 0.6f, 0.9f, 0.8f);
 
 	
-	drawSnowman(2.0f,-8.0f, 1.5f, -5.0f);
+	drawSnowman(5.0f,-18.0f, 1.5f, 4.0f);
     glutSwapBuffers();
     
 }
