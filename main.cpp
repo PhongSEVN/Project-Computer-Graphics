@@ -8,11 +8,11 @@
 #include <Windows.h>
 
 float camX = 0.0f, camY = 2.0f, camZ = 10.0f;  // Vi tri camera
-float camYaw = 0.0f, camPitch = 0.0f;         // G?oc yaw v? pitch
+float camYaw = 0.0f, camPitch = 0.0f;         // Goc yaw va pitch
 float velocity = 0.03f;                          // Toc do di chuyen
-float rotationSpeed = 0.005f;                 // T?c d? xoay camera
-bool isLeftMousePressed = false;              // Tr?ng th?i nh?n chu?t tr?i
-int lastMouseX, lastMouseY;                   // V? tr? chu?t tru?c d?
+float rotationSpeed = 0.005f;                 // Toc do xoay camera
+bool isLeftMousePressed = false;              // Trang thai nhan chuot trai
+int lastMouseX, lastMouseY;                   // Vi tri chuot truoc do
 
 std::map<unsigned char, bool> keyStates;      // Trang thai phim thuong
 std::map<int, bool> specialKeyStates;         // Trang thai phim dac biet
@@ -168,7 +168,7 @@ void init(void) {
 
 void handleKeyboardDown(unsigned char key, int x, int y) {
     keyStates[key] = true;
-    if (key == 27) exit(0);  // ESC d? tho?t
+    if (key == 27) exit(0);  // ESC de thoat
 }
 
 void handleKeyboardUp(unsigned char key, int x, int y) {
@@ -402,7 +402,7 @@ void drawHouse() {
     glVertex3f(0.0f, 5.0f, 0.0f);
     
     // Ve cua
-	glColor3f(0.5f, 0.2f, 0.0f); // M?u n?u
+	glColor3f(0.5f, 0.2f, 0.0f); // Brown
 	glBegin(GL_QUADS);
 	glVertex3f(-2.01f, 0.0f, 0.5f);
 	glVertex3f(-2.01f, 0.0f, -0.5f);
@@ -441,7 +441,7 @@ void drawBox(float scale, float posX, float posY, float posZ, float r, float g, 
 
     // Dai ruy bang ngang
     glPushMatrix();
-    glTranslatef(posX, posY, posZ); // Gi? ? v? tr? h?p
+    glTranslatef(posX, posY, posZ);
     glScalef(scale, scale * 1.2f, scale * 0.2f);
     glColor3f(b, r, g); // Random color
     glutSolidCube(1.2f);
@@ -536,7 +536,7 @@ void reshape(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-// X? l? s? ki?n chu?t
+// Xu ly su kien chuot
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON) {
         if (state == GLUT_DOWN) {
@@ -549,7 +549,7 @@ void mouse(int button, int state, int x, int y) {
     }
 }
 
-// X? l? s? ki?n di chuy?n chu?t
+// Xu ly su kien di chuyen chuot
 void motion(int x, int y) {
     if (isLeftMousePressed) {
         int deltaX = x - lastMouseX;
@@ -558,7 +558,7 @@ void motion(int x, int y) {
         camYaw += deltaX * rotationSpeed;
         camPitch -= deltaY * rotationSpeed;
 
-        // Gi?i h?n pitch d? tr?nh l?t camera
+        // Gioi han pitch
         if (camPitch > M_PI / 2.0f) camPitch = M_PI / 2.0f;
         if (camPitch < -M_PI / 2.0f) camPitch = -M_PI / 2.0f;
 
